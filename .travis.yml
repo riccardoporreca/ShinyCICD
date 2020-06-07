@@ -17,7 +17,7 @@ deploy:
   - >
     cd $TRAVIS_BUILD_DIR &&
     pwd &&
-    ls -la . &&
+    ls -la renv &&
     Rscript
     -e 'account_info <- lapply(paste0("SHINYAPPS_", c("ACCOUNT", "TOKEN", "SECRET")), Sys.getenv)'
     -e 'do.call(rsconnect::setAccountInfo, account_info)'
