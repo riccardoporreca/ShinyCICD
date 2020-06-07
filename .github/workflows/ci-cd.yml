@@ -31,11 +31,32 @@ jobs:
           key: ${{ runner.os }}-r-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ runner.os }}-r-
 
+      - name: Cache packages
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+
+
       - name: Install system dependencies
+        if: false
         env:
           RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |
           Rscript -e "remotes::install_github('r-hub/sysreqs')"
+          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
+          sudo -s eval "$sysreqs"
+          # rsconnect dependencies
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+            libxml2-dev libcurl4-openssl-dev
+
+      - name: Install system dependencies
+        env:
+          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
+        run: |
+          Rscript -e "renv::install('r-hub/sysreqs')"
           sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
           sudo -s eval "$sysreqs"
           # rsconnect dependencies
@@ -49,14 +70,6 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran(c("rcmdcheck", "rsconnect"))
         shell: Rscript {0}
-
-      - name: Cache packages
-        uses: actions/cache@v1
-        with:
-          path: ${{ env.RENV_PATHS_ROOT }}
-          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-renv-
 
       - name: Restore packages
         shell: Rscript {0}
