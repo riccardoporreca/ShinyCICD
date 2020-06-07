@@ -14,8 +14,8 @@ install:
 deploy:
   provider: script
   script:
-  - >-
-    cd $TRAVIS_BUILD_DIR
+  - >
+    cd $TRAVIS_BUILD_DIR &&
     Rscript
     -e 'account_info <- lapply(paste0("SHINYAPPS_", c("ACCOUNT", "TOKEN", "SECRET")), Sys.getenv)'
     -e 'do.call(rsconnect::setAccountInfo, account_info)'
