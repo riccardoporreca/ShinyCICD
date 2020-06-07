@@ -9,5 +9,6 @@ $run_dev.*
 ^LICENSE\.md$
 ^README\.Rmd$
 ^\.travis\.yml$
+^\.github$
 ^app\.R$
 ^rsconnect$
