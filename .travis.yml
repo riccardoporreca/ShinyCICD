@@ -21,4 +21,4 @@ deploy:
     -e 'do.call(rsconnect::setAccountInfo, account_info)'
     -e 'rsconnect::deployApp(appName = "ShinyCICD", appFiles = setdiff(list.files(), "renv"))'
   on:
-    branch: master
+    branch: .master
