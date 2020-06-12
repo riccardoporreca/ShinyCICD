@@ -1,6 +1,9 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
+r:
+  - 4.0
+
 # dependencies via renv: https://rstudio.github.io/renv/articles/ci.html
 cache:
   directories:
