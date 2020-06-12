@@ -8,7 +8,7 @@
 app_server <- function(input, output, session) {
 
   x <- faithful[, 2]
-  y <- faithful[, 1]
+  y <- faithful[, 3]
 
   # generate bins based on input$bins from ui.R
   bins <- reactive(seq(min(x), max(x), length.out = input$bins + 1))
