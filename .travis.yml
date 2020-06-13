@@ -16,4 +16,4 @@ deploy:
   skip_cleanup: true # necessary to keep the renv project library
   script: Rscript deploy/deploy_shinyapps.R
   on:
-    branch: final # disabled
+    branch: .final # disabled
