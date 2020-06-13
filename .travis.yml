@@ -13,7 +13,7 @@ install:
 
 deploy:
   provider: script
-  skip_cleanup: true
+  skip_cleanup: true # necessary to keep the renv project library
   script:
   - >-
     Rscript
@@ -21,4 +21,4 @@ deploy:
     -e 'do.call(rsconnect::setAccountInfo, account_info)'
     -e 'rsconnect::deployApp(appName = "ShinyCICD", appFiles = setdiff(list.files(), "renv"))'
   on:
-    branch: .master
+    branch: .master # disabled
