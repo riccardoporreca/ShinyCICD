@@ -4,8 +4,6 @@ on: [push, pull_request]
 # Name of the workflow => usethis::use_github_actions_badge("CI-CD")
 name: CI-CD
 
-# renv with GitHub actions: https://rstudio.github.io/renv/articles/ci.html#github-actions
-
 jobs:
   CI-CD:
     runs-on: ubuntu-latest
@@ -39,7 +37,7 @@ jobs:
         env:
           RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |
-          Rscript -e "renv::install('r-hub/sysreqs')"
+          Rscript -e "remotes::install_github('r-hub/sysreqs')"
           sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
           sudo -s eval "$sysreqs"
 
