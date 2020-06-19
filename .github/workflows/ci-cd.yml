@@ -50,7 +50,7 @@ jobs:
           rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
 
       - name: Deploy to shinyapps.io
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/final'
         env:
           SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
           SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
