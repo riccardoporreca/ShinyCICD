@@ -28,7 +28,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-renv-
 
-
       - name: Install system dependencies
         env:
           RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
@@ -39,15 +38,13 @@ jobs:
 
       - name: Restore packages
         shell: Rscript {0}
-        run: |
-          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-          renv::restore()
+        run: renv::restore()
 
       - name: Check package
         shell: Rscript {0}
         run: |
           install.packages("rcmdcheck")
-          rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
+          rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")
 
       - name: Deploy to shinyapps.io
         if: github.ref == 'refs/heads/final'

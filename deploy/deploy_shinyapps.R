@@ -1,8 +1,8 @@
-account_info <- lapply(
-  paste0("SHINYAPPS_", c("ACCOUNT", "TOKEN", "SECRET")),
-  Sys.getenv
+rsconnect::setAccountInfo(
+  Sys.getenv("SHINYAPPS_ACCOUNT"),
+  Sys.getenv("SHINYAPPS_TOKEN"),
+  Sys.getenv("SHINYAPPS_SECRET")
 )
-do.call(rsconnect::setAccountInfo, account_info)
 rsconnect::deployApp(
   appName = "ShinyCICD",
   # exclude hidden files and renv directory
