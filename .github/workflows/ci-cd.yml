@@ -20,13 +20,20 @@ jobs:
         with:
           r-version: '4.0'
 
+      - name: Query dependencies
+        shell: Rscript {0}
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+
       - name: Cache packages
         uses: actions/cache@v2
         with:
-          path: ${{ env.RENV_PATHS_ROOT }}
-          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: |
-            ${{ runner.os }}-renv-
+            ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-
 
       - name: Install system dependencies
         env:
@@ -36,9 +43,9 @@ jobs:
           sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
           sudo -s eval "$sysreqs"
 
-      - name: Restore packages
+      - name: Install dependencies
         shell: Rscript {0}
-        run: renv::restore()
+        run: remotes::install_deps(dependencies = TRUE)
 
       - name: Check package
         shell: Rscript {0}
@@ -47,7 +54,7 @@ jobs:
           rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")
 
       - name: Deploy to shinyapps.io
-        if: github.ref == 'refs/heads/final..'
+        if: github.ref == 'refs/heads/final'
         env:
           SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
           SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
